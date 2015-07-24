@@ -25,6 +25,7 @@ hystrix:
 foo: bar
 company: Pivotal
 latency: false
+newparam: 123
 
 
 ---
