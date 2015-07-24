@@ -1,17 +1,34 @@
 eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${server.port:8080}}
   client:
+    registerWithEureka: false
+    registryFetchIntervalSeconds: 10
     serviceUrl:
-      defaultZone: ${vcap.services.service-registry.credentials.uri:http://127.0.0.1:8761}/eureka/
+      defaultZone: http://${vcap.services.eureka-service.credentials.uri:127.0.0.1:8761}/eureka/
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+
+hystrix:
+  command:
+    getQuote:
+      execution.isolation.thread.timeoutInMilliseconds: 2000
+    getCompanies:
+      execution.isolation.thread.timeoutInMilliseconds: 2000
+    getPortfolioValue:
+      execution.isolation.thread.timeoutInMilliseconds: 500
 
 foo: bar
+company: Pivotal
+latency: false
+
 
 ---
 spring:
   profiles: cloud
+  jpa:
+     hibernate:
+        ddl-auto: update
 eureka:
   instance:
     hostname: ${vcap.application.uris[0]}
@@ -19,24 +36,24 @@ eureka:
 
 ---
 spring:
-  profiles: lattice
-  application:
-    index: ${instance.index}
+  profiles: local
+  jpa:
+     hibernate:
+        ddl-auto: update
 server:
   port: 8080
 eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka.52.5.229.248.xip.io/eureka/
   instance:
-    metadataMap:
-      instanceId: ${instance.guid}:${spring.application.name}:${server.port:8080}
-    hostname: ${cf.instance.ip}
-    nonSecurePort: ${cf.instance.port}
-lattice:
-  receptor:
-    host: receptor.52.5.229.248.xip.io
-services:
-  rabbitmq:
-    host: 10.0.1.207
-    port: 61111
+    nonSecurePort: ${server.port}
+---
+logging:
+  level:
+     io:
+        pivotal: DEBUG
+     org:
+        springframework:
+           web: WARN
+           cloud: WARN
+     com:
+       netflix:
+         hystrix: DEBUG
