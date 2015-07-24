@@ -24,7 +24,7 @@ hystrix:
 
 foo: bar
 company: Pivotal
-latency: true
+latency: false
 
 
 ---
