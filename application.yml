@@ -1,26 +1,7 @@
 spring:
-#  profiles.active: local
+  profiles.active: local
   application:
      name: webUI
-eureka:
-  client:
-    registerWithEureka: false
-    registryFetchIntervalSeconds: 10
-    serviceUrl:
-      defaultZone: http://${vcap.services.eureka-service.credentials.uri:127.0.0.1:8761}/eureka/
-  instance:
-    hostname: ${vcap.application.uris[0]:localhost} 
-    metadataMap:
-      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
-
-hystrix:
-  command:
-    getQuote:
-      execution.isolation.thread.timeoutInMilliseconds: 1000
-    getCompanies:
-      execution.isolation.thread.timeoutInMilliseconds: 1000
-    getPortfolioValue:
-      execution.isolation.thread.timeoutInMilliseconds: 500
 
 foo: bar
 company: Pivotal
@@ -45,6 +26,26 @@ spring:
   jpa:
      hibernate:
         ddl-auto: update
+eureka:
+  client:
+    registerWithEureka: false
+    registryFetchIntervalSeconds: 10
+    serviceUrl:
+      defaultZone: http://${vcap.services.eureka-service.credentials.uri:127.0.0.1:8761}/eureka/
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+
+hystrix:
+  command:
+    getQuote:
+      execution.isolation.thread.timeoutInMilliseconds: 1000
+    getCompanies:
+      execution.isolation.thread.timeoutInMilliseconds: 1000
+    getPortfolioValue:
+      execution.isolation.thread.timeoutInMilliseconds: 500
+
 
 ---
 logging:
