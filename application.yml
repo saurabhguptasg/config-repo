@@ -23,7 +23,7 @@ hystrix:
       execution.isolation.thread.timeoutInMilliseconds: 500
 
 foo: bar
-company: Pivotal
+company: Company XYZ
 latency: true
 newparam: 123
 
