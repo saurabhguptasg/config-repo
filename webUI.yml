@@ -20,7 +20,7 @@ hystrix:
 
 foo: bar
 company: Pivotal
-latency: false
+latency: true
 
 
 ---
