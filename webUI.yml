@@ -1,2 +1,59 @@
+eureka:
+  client:
+    registerWithEureka: false
+    registryFetchIntervalSeconds: 10
+    serviceUrl:
+      defaultZone: http://${vcap.services.eureka-service.credentials.uri:127.0.0.1:8761}/eureka/
+  instance:
+    hostname: ${vcap.application.uris[0]:localhost}
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+
+hystrix:
+  command:
+    getQuote:
+      execution.isolation.thread.timeoutInMilliseconds: 2000
+    getCompanies:
+      execution.isolation.thread.timeoutInMilliseconds: 2000
+    getPortfolioValue:
+      execution.isolation.thread.timeoutInMilliseconds: 500
+
+foo: bar
 company: Pivotal
 latency: false
+
+
+---
+spring:
+  profiles: cloud
+  jpa:
+     hibernate:
+        ddl-auto: update
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]}
+    nonSecurePort: 80
+
+---
+spring:
+  profiles: local
+  jpa:
+     hibernate:
+        ddl-auto: update
+server:
+  port: 8080
+eureka:
+  instance:
+    nonSecurePort: ${server.port}
+---
+logging:
+  level:
+     io:
+        pivotal: DEBUG
+     org:
+        springframework:
+           web: WARN
+           cloud: WARN
+     com:
+       netflix:
+         hystrix: DEBUG
